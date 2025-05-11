@@ -8,23 +8,22 @@
         xmlns:local="clr-namespace:OX_Game_Client.Views"
         xmlns:vm="clr-namespace:OX_Game_Client.ViewModels"
         mc:Ignorable="d"
-        Title="죽음의 OX 게임" Height="450" Width="700">
-    <Grid x:Name="MainGrid" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+        Title="죽음의 OX 게임" Height="500" Width="900">
+    <Grid x:Name="MainGrid" >
         <!-- 유저 이름 입력란 -->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <!--<RowDefinition Height="*" />-->
+            <!--<RowDefinition Height="*" />-->
         </Grid.RowDefinitions>
 
         <!-- 유저 이름 라벨 -->
-        <Label Content="유저 이름" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"/>
+        <Label Content="유저 이름" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,146,0,0"/>
 
         <!-- 유저 이름 입력 텍스트박스 -->
-        <TextBox x:Name="UserNameTextBox"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Width="200" Height="30" Margin="0,0,0,40" Grid.Row="1"/>
-        <Button Content="확인" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="40" 
-                Click="OnConfirmClick"
-                Grid.Row="2" />
+        <TextBox x:Name="UserNameTextBox"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Top" TextAlignment="Center" Width="200" Height="30" Margin="0,177,0,0"/>
+        <Button Content="확인" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" 
+                Click="OnConfirmClick" Margin="0,225,0,0" />
 
         <!--<Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Source="./Views/Empty.xaml" 
                Grid.RowSpan="3" Visibility="Collapsed"/>-->
