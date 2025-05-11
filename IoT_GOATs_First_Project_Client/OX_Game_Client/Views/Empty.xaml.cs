@@ -19,7 +19,7 @@ namespace OX_Game_Client.Views
     /// <summary>
     /// Empty.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class Empty : MetroWindow
+    public partial class Empty : UserControl
     {
         public Empty()
         {

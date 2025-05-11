@@ -9,7 +9,7 @@
         xmlns:vm="clr-namespace:OX_Game_Client.ViewModels"
         mc:Ignorable="d"
         Title="죽음의 OX 게임" Height="450" Width="700">
-    <Grid Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid x:Name="MainGrid" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
         <!-- 유저 이름 입력란 -->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -23,7 +23,7 @@
         <!-- 유저 이름 입력 텍스트박스 -->
         <TextBox x:Name="UserNameTextBox"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Width="200" Height="30" Margin="0,0,0,40" Grid.Row="1"/>
         <Button Content="확인" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="40" 
-                Command="{Binding TestSubmitCommand}"
+                Click="OnConfirmClick"
                 Grid.Row="2" />
 
         <!--<Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Source="./Views/Empty.xaml" 

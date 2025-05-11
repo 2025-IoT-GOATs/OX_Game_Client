@@ -21,19 +21,11 @@ namespace OX_Game_Client.Views
         public MainView()
         {
             InitializeComponent();
-            var viewModel = new MainViewModel();
-            this.DataContext = viewModel;
-
-            viewModel.RequestNavigateToEmptyPage += NavigateToEmptyPage;
         }
-        private void NavigateToEmptyPage()
+        private void OnConfirmClick(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Visibility = Visibility.Collapsed;
-            //MainFrame.Navigate(new Empty());
-            //MainFrame.Visibility = Visibility.Visible;
-            Empty emptyPage = new Empty();
-            emptyPage.Show();
-            this.Close();
+            MainGrid.Children.Clear();
+            MainGrid.Children.Add(new Views.Empty());
         }
 
     }

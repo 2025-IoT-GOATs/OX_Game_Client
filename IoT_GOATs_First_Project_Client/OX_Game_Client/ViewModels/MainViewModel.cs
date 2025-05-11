@@ -13,50 +13,16 @@ using OX_Game_Client.Views;
 
 namespace OX_Game_Client.ViewModels
 {
-    public class RelayCommand : ICommand
-    {
-        private readonly Action _execute;
-        private readonly Func<bool>? _canExecute;
-
-        public event EventHandler? CanExecuteChanged;
-
-        public RelayCommand(Action execute, Func<bool>? canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object? parameter) => _canExecute?.Invoke() ?? true;
-
-        public void Execute(object? parameter) => _execute();
-    }
     public class MainViewModel : INotifyPropertyChanged
     {
         public string Name { get; set; }
-
-        public ICommand TestSubmitCommand { get; }
-
-        public event Action? RequestNavigateToEmptyPage;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public MainViewModel()
         {
-            TestSubmitCommand = new RelayCommand(TestSubmit);
+            
         }
-
-        private void TestSubmit()
-        {
-            if (string.IsNullOrWhiteSpace(Name))
-            {
-                MessageBox.Show("유저 이름을 입력해주세요.");
-                return;
-            }
-
-            // View에 전환 요청
-            RequestNavigateToEmptyPage?.Invoke();
-        }
-
 
         public void Login(string name)
         {
