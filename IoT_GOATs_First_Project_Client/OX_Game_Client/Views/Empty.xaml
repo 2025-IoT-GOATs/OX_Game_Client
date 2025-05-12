@@ -1,7 +1,0 @@
-﻿<UserControl x:Class="OX_Game_Client.Views.Empty"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <Label Content="Test" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
-</UserControl>

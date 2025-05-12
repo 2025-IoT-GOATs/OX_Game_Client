@@ -14,58 +14,20 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using OX_Game_Client.Models;
-using MahApps.Metro.Controls;
-using System.Windows.Controls;
 
 namespace OX_Game_Client.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class InGameViewModel : ObservableObject
     {
-       
-        private UserControl _currentView;
+        public InGameViewModel()
+        {
 
-        public UserControl CurrentView
-        {
-            get => _currentView;
-            set => SetProperty(ref _currentView, value);
-        }
-        public MainViewModel()
-        {
-            SocketConn.Instance.connect("210.119.12.82", 9000);
         }
 
         [ObservableProperty]
         private string name;
 
-
-        [RelayCommand]
-        public void Login(string name)
-        {
-            name = "CHAT " + name + "\n";
-            try
-            {
-                SocketConn.Instance.send(name);
-                Thread t = new Thread(() =>
-                {
-                    //SocketConn.Instance.connect("210.119.12.82", 9000);
-                    while (true)
-                    {
-                        SocketConn.Instance.recv();
-                    }
-                });
-                t.IsBackground = true;
-                t.Start();
-            }
-            catch (Exception)
-            {
-            }
-            var vm = new InGameViewModel();
-            var v = new InGameView
-            {
-                DataContext = vm
-            };
-            CurrentView = v;
-        }
+        
 
         //private async void OnConfirmClick(object sender, RoutedEventArgs e)
         //{

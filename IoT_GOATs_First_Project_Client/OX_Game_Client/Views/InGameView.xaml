@@ -1,10 +1,12 @@
-﻿<UserControl x:Class="OX_Game_Client.Views.InGameWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="900">
-    <UserControl Width="900" Height="500">
+﻿<UserControl x:Class="OX_Game_Client.Views.InGameView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:local="clr-namespace:OX_Game_Client.Views"
+        mc:Ignorable="d" 
+        d:DesignHeight="500" d:DesignWidth="900" Background="White">
         <Grid>
             <!-- 상단: 문제 -->
             <Grid.RowDefinitions>
@@ -18,17 +20,19 @@
 
             <!-- 상단 문제 텍스트 -->
             <TextBlock x:Name="QuestionText" Text="OX 문제를 표시하세요" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Grid.Row="0"/>
+            
             <!--<ProgressBar x:Name="TimerBar" Height="10" Minimum="0" Maximum="100" Value="100"/>-->
-            <Canvas x:Name="GameCanvas" Background="LightGray" Width="700" Height="450" Focusable="True" Grid.Row="1" Grid.Column="0">
+            <Canvas x:Name="GameCanvas" Background="Transparent" Width="700" Height="450" Focusable="True" Grid.Row="1" Grid.Column="0" >
                 
                     <!-- O 영역 -->
                 <Rectangle Width="350" Height="450" Fill="LightBlue" Canvas.Left="0" Canvas.Top="0"/>
                 <TextBlock Text="O" FontSize="40" FontWeight="Bold" Canvas.Left="150" Canvas.Top="10"/>
+                <!--<Button Content="test" Click=""/>-->
 
                 <!-- X 영역 -->
                 <Rectangle Width="350" Height="450" Fill="LightPink" Canvas.Left="350" Canvas.Top="0"/>
                 <TextBlock Text="X" FontSize="40" FontWeight="Bold" Canvas.Left="500" Canvas.Top="10"/>
-
+                
                 <!-- 캐릭터 (예: 빨간 네모) -->
                 <Canvas x:Name="Character" Canvas.Left="100" Canvas.Top="300">
                     <!-- 몸통 -->
@@ -64,5 +68,4 @@
             </StackPanel>
 
         </Grid>
-    </UserControl>
 </UserControl>
