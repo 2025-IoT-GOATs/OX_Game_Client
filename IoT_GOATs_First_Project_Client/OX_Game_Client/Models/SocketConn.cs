@@ -84,7 +84,7 @@ namespace OX_Game_Client.Models
                         string txt = Encoding.UTF8.GetString(r_buf, 0, size);
                         TaskQueue.Enqueue(txt);
                         //TaskQueue.Dequeue().ToString();
-                        Console.WriteLine("Login Success log from Server : " + txt);
+                        Console.WriteLine("log from Server : " + txt);
                         //return TaskQueue.Dequeue();
                         // r_buf [0 ~ size] 짤라내고 짤린바로다음을 0번으로 땡겨와야됨 아마도 씨샾 기본제공 메서드 있을거임
 

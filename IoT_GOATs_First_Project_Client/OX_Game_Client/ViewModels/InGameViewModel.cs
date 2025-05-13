@@ -27,7 +27,25 @@ namespace OX_Game_Client.ViewModels
         [ObservableProperty]
         private string name;
 
-        
+        [ObservableProperty]
+        private string inputMessage;
+
+
+        [RelayCommand]
+        public async void SendChat(string chatMsg)
+        {
+            chatMsg = ($"CHAT {chatMsg} \n").Trim();
+            try
+            {
+                await SocketConn.Instance.send(chatMsg);
+                await SocketConn.Instance.recv();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         //private async void OnConfirmClick(object sender, RoutedEventArgs e)
         //{
@@ -57,6 +75,6 @@ namespace OX_Game_Client.ViewModels
 
         //}
 
-        
+
     }
 }

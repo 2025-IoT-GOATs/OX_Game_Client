@@ -37,7 +37,6 @@ namespace OX_Game_Client.ViewModels
         [ObservableProperty]
         private string name;
 
-
         [RelayCommand]
         public async void Login(string name)
         {
@@ -71,6 +70,7 @@ namespace OX_Game_Client.ViewModels
             };
             CurrentView = v;
         }
+
         
     }
 }
