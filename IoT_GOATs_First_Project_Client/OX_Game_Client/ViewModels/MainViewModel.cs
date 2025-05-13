@@ -31,7 +31,7 @@ namespace OX_Game_Client.ViewModels
         }
         public MainViewModel()
         {
-            SocketConn.Instance.connect("210.119.12.82", 9000);
+            //SocketConn.Instance.connect("210.119.12.82", 9000);
         }
 
         [ObservableProperty]
@@ -39,22 +39,27 @@ namespace OX_Game_Client.ViewModels
 
 
         [RelayCommand]
-        public void Login(string name)
+        public async void Login(string name)
         {
             name = "CHAT " + name + "\n";
             try
             {
-                SocketConn.Instance.send(name);
-                Thread t = new Thread(() =>
-                {
-                    //SocketConn.Instance.connect("210.119.12.82", 9000);
-                    while (true)
-                    {
-                        SocketConn.Instance.recv();
-                    }
-                });
-                t.IsBackground = true;
-                t.Start();
+                await SocketConn.Instance.connect("210.119.12.82", 9000);
+
+                await SocketConn.Instance.send(name);
+                
+                await SocketConn.Instance.recv();
+                
+                //Thread t = new Thread(() =>
+                //{
+                //    //SocketConn.Instance.connect("210.119.12.82", 9000);
+                //    while (true)
+                //    {
+                //        SocketConn.Instance.recv();
+                //    }
+                //});
+                //t.IsBackground = true;
+                //t.Start();
             }
             catch (Exception)
             {
@@ -66,35 +71,6 @@ namespace OX_Game_Client.ViewModels
             };
             CurrentView = v;
         }
-
-        //private async void OnConfirmClick(object sender, RoutedEventArgs e)
-        //{
-        //    string userName = UserNameTextBox.Text;
-        //    if (string.IsNullOrEmpty(userName))
-        //    {
-        //        MessageBox.Show("이름을 입력하시오");
-        //        return;
-        //    }
-        //    await Task.Run(() => SocketConn.Instance.Login(userName));
-        //    Dispatcher.BeginInvoke(() => {
-        //        MainGrid.Children.Clear();
-        //        MainGrid.Children.Add(new Views.InGameWindow(userName));
-        //    });
-        //    //SocketConn.Instance.Login(userName);
-        //    //await Login(userName);
-        //    //Thread t1 = new Thread(() => {  
-        //    //SocketConn.Instance.Login(userName);
-        //    ////await Login(userName);
-        //    //Dispatcher.Invoke(() => {
-        //    //    MainGrid.Children.Clear();
-        //    //    MainGrid.Children.Add(new Views.InGameWindow(userName));
-        //    //});
-        //    //await Task.Run(() => SocketConn.Instance.Login(userName));
-
-        //    //t1.Start();
-
-        //}
-
         
     }
 }

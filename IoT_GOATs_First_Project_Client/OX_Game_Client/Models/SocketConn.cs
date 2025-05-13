@@ -38,45 +38,67 @@ namespace OX_Game_Client.Models
         private SocketConn()
         {
 
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
         }
-        public void connect(string ip, short port)
+        public async Task connect(string ip, short port)
         {
-            try
+            await Task.Run(() =>
             {
-                EndPoint serverEP = new IPEndPoint(IPAddress.Parse(ip), port);
-                socket.Connect(serverEP);
-            }
-            catch (Exception ex)
-            {
-            }
-        }
-        public void send(string msg)
-        {
-            setBuf(msg);
-            try
-            {
-                socket.Send(s_buf);
-                s_buf = null;
-            }
-            catch (Exception)
-            {
-            }
-        }
-        public void recv()
-        {
-            r_buf = new byte[1024];
-            int size = socket.Receive(r_buf);
-            string txt = Encoding.UTF8.GetString(r_buf, 0, size);
-            TaskQueue.Enqueue(txt);
-            //TaskQueue.Dequeue().ToString();
-            Console.WriteLine("Login Success log from Server : " + txt);
-            //return TaskQueue.Dequeue();
-            // r_buf [0 ~ size] 짤라내고 짤린바로다음을 0번으로 땡겨와야됨 아마도 씨샾 기본제공 메서드 있을거임
+                try
+                {
+                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    EndPoint serverEP = new IPEndPoint(IPAddress.Parse(ip), port);
+                    socket.Connect(serverEP);
 
-        }
 
+                }
+                catch (Exception ex)
+                {
+                }
+            });
+            
+        }
+        public async Task send(string msg)
+        {
+            await Task.Run(() => {
+                try
+                {
+                    setBuf(msg);
+                    socket.Send(s_buf);
+                    s_buf = null;
+
+                }
+                catch (Exception)
+                {
+                }
+            });
+        }
+        public async Task recv()
+        {
+            await Task.Run(() => {
+                while (true)
+                {
+                    try
+                    {
+                        r_buf = new byte[1024];
+                        int size = socket.Receive(r_buf);
+                        string txt = Encoding.UTF8.GetString(r_buf, 0, size);
+                        TaskQueue.Enqueue(txt);
+                        //TaskQueue.Dequeue().ToString();
+                        Console.WriteLine("Login Success log from Server : " + txt);
+                        //return TaskQueue.Dequeue();
+                        // r_buf [0 ~ size] 짤라내고 짤린바로다음을 0번으로 땡겨와야됨 아마도 씨샾 기본제공 메서드 있을거임
+
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                }
+            });
+            
+            
+        }
         //public void Login(string name)
         //{
         //    name = "CHAT " + name + "\n";
