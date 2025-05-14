@@ -5,6 +5,10 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Windows.Interop;
+using System.Windows.Threading;
+using System.Windows;
 
 namespace OX_Game_Client.Models
 {
@@ -16,13 +20,15 @@ namespace OX_Game_Client.Models
         private byte[] r_buf;
         Queue<string> TaskQueue = new Queue<string>();
         // 쓰레드 하나가 백그라운드로 돌아감, while (true) 큐에 데이터가 있나?
+
+        public event Action<string> MessageReceived;
         public byte[] s_Buf
         {
             get => s_buf;
         }
         public void setBuf(string name)
         {
-            this.s_buf = Encoding.UTF8.GetBytes(name);
+            this.s_buf = Encoding.UTF8.GetBytes(name, 0, name.Length);
         }
         public byte[] r_Buf
         {
@@ -41,14 +47,14 @@ namespace OX_Game_Client.Models
         }
         public async Task connect(string ip, short port)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 try
                 {
                     socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     EndPoint serverEP = new IPEndPoint(IPAddress.Parse(ip), port);
                     socket.Connect(serverEP);
-
+                    await recv();
 
                 }
                 catch (Exception ex)
@@ -74,19 +80,24 @@ namespace OX_Game_Client.Models
         }
         public async Task recv()
         {
-            await Task.Run(() => {
+            await Task.Run(async () => {
                 while (true)
                 {
                     try
                     {
                         r_buf = new byte[1024];
                         int size = socket.Receive(r_buf);
-                        string txt = Encoding.UTF8.GetString(r_buf, 0, size);
+                        string txt = Encoding.UTF8.GetString(r_buf, 0, size-1).Trim();
                         TaskQueue.Enqueue(txt);
-                        //TaskQueue.Dequeue().ToString();
-                        Console.WriteLine("log from Server : " + txt);
-                        //return TaskQueue.Dequeue();
-                        // r_buf [0 ~ size] 짤라내고 짤린바로다음을 0번으로 땡겨와야됨 아마도 씨샾 기본제공 메서드 있을거임
+                        if (TaskQueue.Count > 0)
+                        {
+                           var temp = TaskQueue.Dequeue().ToString();
+                           Application.Current.Dispatcher.Invoke(() => {
+                               MessageReceived?.Invoke(temp);
+                               Console.WriteLine("Received : " + temp);
+                               
+                           });
+                        }
 
                     }
                     catch (Exception)
@@ -99,30 +110,5 @@ namespace OX_Game_Client.Models
             
             
         }
-        //public void Login(string name)
-        //{
-        //    name = "CHAT " + name + "\n";
-        //    try
-        //    {
-        //        //EndPoint serverEP = new IPEndPoint(IPAddress.Parse("210.119.12.82"), 9000);
-        //        //socket.Connect(serverEP);
-        //        //byte[] buf = Encoding.UTF8.GetBytes(name);
-        //        //socket.Send(buf);
-
-        //        //byte[] recvBytes = new byte[1024];
-        //        //int nRecv = socket.Receive(recvBytes);
-        //        //string txt = Encoding.UTF8.GetString(recvBytes, 0, nRecv);
-
-        //        //Console.WriteLine("Login Success log from Server : " + txt);
-
-        //        //socket.Close();
-        //        //Console.WriteLine("TCP Client Socket Closed");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("Error: " + ex.Message);
-
-        //    }
-        //}
     }
 }

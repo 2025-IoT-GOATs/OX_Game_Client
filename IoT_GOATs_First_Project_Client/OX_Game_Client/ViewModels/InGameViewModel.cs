@@ -14,14 +14,44 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using OX_Game_Client.Models;
+using System.Collections.ObjectModel;
+using System.IO;
 
 namespace OX_Game_Client.ViewModels
 {
     public partial class InGameViewModel : ObservableObject
     {
-        public InGameViewModel()
+        private readonly SocketConn _client = SocketConn.Instance;
+        public InGameViewModel(string name)
         {
-
+            Name = name;
+            _client.MessageReceived += OnChatReceived;
+        }
+        private void OnChatReceived(string msg)
+        {
+            StringReader rs = new StringReader(msg);
+            string readMsg = rs.ReadLine();
+            string[] words = readMsg.Split(' ');
+            if (words[0] ==  "CHAT")
+            {
+                msg = msg.Substring(5, msg.Length - 5);
+                if (words[0] + words[1] == "CHATOK")
+                {
+                    OutputMessages.Add("채팅방 입갤");
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        OutputMessages.Add(msg);
+                    });
+                }
+            }
+            else if (words[0] == "MOVE")
+            {
+                // TO DO MOVE
+            }
+            
         }
 
         [ObservableProperty]
@@ -30,51 +60,27 @@ namespace OX_Game_Client.ViewModels
         [ObservableProperty]
         private string inputMessage;
 
+        public ObservableCollection<string> OutputMessages { get; } = new ObservableCollection<string>();
 
         [RelayCommand]
-        public async void SendChat(string chatMsg)
+        public async void SendChat()
         {
-            chatMsg = ($"CHAT {chatMsg} \n").Trim();
+            //chatMsg = "CHAT" + Name + chatMsg + "\n";
+            string chatMsg = $"CHAT {Name} {InputMessage}\n";
+            //Console.WriteLine("sendchat" + chatMsg);
+            //string txt = Encoding.UTF8.GetString(SocketConn.Instance.r_Buf, 0, SocketConn.Instance.r_Buf.Length - 1).Trim();
             try
             {
                 await SocketConn.Instance.send(chatMsg);
-                await SocketConn.Instance.recv();
+                //await SocketConn.Instance.recv();
+                //OutputMessages.Add(chatMsg);
+                //OutputMessages.Add(txt);
             }
             catch (Exception)
             {
 
-                throw;
             }
         }
-
-        //private async void OnConfirmClick(object sender, RoutedEventArgs e)
-        //{
-        //    string userName = UserNameTextBox.Text;
-        //    if (string.IsNullOrEmpty(userName))
-        //    {
-        //        MessageBox.Show("이름을 입력하시오");
-        //        return;
-        //    }
-        //    await Task.Run(() => SocketConn.Instance.Login(userName));
-        //    Dispatcher.BeginInvoke(() => {
-        //        MainGrid.Children.Clear();
-        //        MainGrid.Children.Add(new Views.InGameWindow(userName));
-        //    });
-        //    //SocketConn.Instance.Login(userName);
-        //    //await Login(userName);
-        //    //Thread t1 = new Thread(() => {  
-        //    //SocketConn.Instance.Login(userName);
-        //    ////await Login(userName);
-        //    //Dispatcher.Invoke(() => {
-        //    //    MainGrid.Children.Clear();
-        //    //    MainGrid.Children.Add(new Views.InGameWindow(userName));
-        //    //});
-        //    //await Task.Run(() => SocketConn.Instance.Login(userName));
-
-        //    //t1.Start();
-
-        //}
-
 
     }
 }
