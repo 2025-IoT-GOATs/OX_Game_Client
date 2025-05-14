@@ -4,11 +4,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:OX_Game_Client.Views"
         mc:Ignorable="d" 
         d:DesignHeight="500" d:DesignWidth="900" Background="White">
         <Grid>
-            <!-- 상단: 문제 -->
+            
+        <!-- 상단: 문제 -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
@@ -22,9 +24,13 @@
             <TextBlock x:Name="QuestionText" Text="OX 문제를 표시하세요" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Grid.Row="0"/>
             
             <!--<ProgressBar x:Name="TimerBar" Height="10" Minimum="0" Maximum="100" Value="100"/>-->
-            <Canvas x:Name="GameCanvas" Background="Transparent" Width="700" Height="450" Focusable="True" Grid.Row="1" Grid.Column="0" >
-                
-                    <!-- O 영역 -->
+        <Canvas x:Name="GameCanvas" Background="Transparent" Width="700" Height="450" Focusable="True" Grid.Row="1" Grid.Column="0" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="KeyDown">
+                    <i:InvokeCommandAction Command="{Binding SendKeyPressCommand}" CommandParameter="{Binding EventArgs.Key}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <!-- O 영역 -->
                 <Rectangle Width="350" Height="450" Fill="LightBlue" Canvas.Left="0" Canvas.Top="0"/>
                 <TextBlock Text="O" FontSize="40" FontWeight="Bold" Canvas.Left="150" Canvas.Top="10"/>
                 <!--<Button Content="test" Click=""/>-->
@@ -35,7 +41,8 @@
                 
                 <!-- 캐릭터 (예: 빨간 네모) -->
                 <Canvas x:Name="Character" Canvas.Left="100" Canvas.Top="300">
-                    <!-- 몸통 -->
+                     
+                <!-- 몸통 -->
                     <Ellipse Width="50" Height="50" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="2"/>
 
                     <!-- 눈 (큰 눈) -->
@@ -61,11 +68,25 @@
             <StackPanel Grid.Column="1" Grid.Row="1" Margin="1" VerticalAlignment="Top">
                 <TextBlock Text="채팅창" FontWeight="Bold" FontSize="14" Margin="0,0,0,5" Background="Bisque" Foreground="Black" TextAlignment="Center"/>
                 <!--<TextBox Height="350" Margin="5" Background="Beige" Foreground="Black"/>-->
-            <ListBox x:Name="ChatList" Height="350" Background="Beige" Foreground="Black" ItemsSource="{Binding OutputMessages}"/>
+            <ListBox x:Name="ChatList" Height="350" Background="Beige" Foreground="Black" ItemsSource="{Binding OutputMessages}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="Beige"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
 
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <TextBox x:Name="ChatInput" Width="125" Margin="5" Background="white" Foreground="Black"
-                         Text="{Binding InputMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding InputMessage, UpdateSourceTrigger=PropertyChanged}">
+                    
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding SendChatCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
                 <Button Content="전송" Width="50" Background="white" Foreground="Black" Command="{Binding SendChatCommand}"/>
                 </StackPanel>
             </StackPanel>

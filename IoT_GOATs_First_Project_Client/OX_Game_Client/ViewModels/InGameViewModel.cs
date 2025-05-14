@@ -72,6 +72,7 @@ namespace OX_Game_Client.ViewModels
             try
             {
                 await SocketConn.Instance.send(chatMsg);
+                InputMessage = string.Empty;
                 //await SocketConn.Instance.recv();
                 //OutputMessages.Add(chatMsg);
                 //OutputMessages.Add(txt);
@@ -79,6 +80,19 @@ namespace OX_Game_Client.ViewModels
             catch (Exception)
             {
 
+            }
+        }
+        [RelayCommand]
+        public async void SendKeyPress(Key key)
+        {
+            Console.WriteLine("키보드 입력");
+            string keyPressMsg = $"MOVE {key.ToString()}\n";
+            try
+            {
+                await _client.send(keyPressMsg);
+            }
+            catch (Exception)
+            {
             }
         }
 
