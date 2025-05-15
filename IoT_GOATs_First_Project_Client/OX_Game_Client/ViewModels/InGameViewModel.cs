@@ -37,7 +37,7 @@ namespace OX_Game_Client.ViewModels
                 msg = msg.Substring(5, msg.Length - 5);
                 if (words[0] + words[1] == "CHATOK")
                 {
-                    OutputMessages.Add("채팅방 입갤");
+                    OutputMessages.Add("채팅방 입장");
                 }
                 else
                 {
@@ -49,9 +49,11 @@ namespace OX_Game_Client.ViewModels
             }
             else if (words[0] == "MOVE")
             {
-                // TO DO MOVE
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    OutputMoveMsg.Add(msg);
+                });
             }
-            
         }
 
         [ObservableProperty]
@@ -61,6 +63,7 @@ namespace OX_Game_Client.ViewModels
         private string inputMessage;
 
         public ObservableCollection<string> OutputMessages { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> OutputMoveMsg { get; } = new ObservableCollection<string>();
 
         [RelayCommand]
         public async void SendChat()
@@ -82,19 +85,56 @@ namespace OX_Game_Client.ViewModels
 
             }
         }
-        [RelayCommand]
-        public async void SendKeyPress(Key key)
+        //[RelayCommand]
+        //public async void SendKeyPress(Key key)
+        //{
+        //    Console.WriteLine("키보드 입력");
+        //    string keyPressMsg = $"MOVE {key.ToString()}\n";
+        //    try
+        //    {
+        //        await _client.send(keyPressMsg);
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
+        //}
+
+        private double x = 100;
+
+        public double X
         {
-            Console.WriteLine("키보드 입력");
-            string keyPressMsg = $"MOVE {key.ToString()}\n";
-            try
-            {
-                await _client.send(keyPressMsg);
-            }
-            catch (Exception)
-            {
-            }
+            get => x;
+            set => SetProperty(ref x, value);
         }
 
+        private double y = 100;
+
+        public double Y
+        {
+            get => y;
+            set => SetProperty(ref y, value);
+        }
+        public async Task Move(string direction)
+        {
+            const double step = 10;
+            string moveMsg = $"MOVE {direction}\n";
+            await SocketConn.Instance.send(moveMsg);
+            moveMsg = string.Empty;
+            //switch (direction)
+            //{
+            //    case "Left":
+            //        X -= step;
+            //        break;
+            //    case "Right":
+            //        X += step;
+            //        break;
+            //    case "Up":
+            //        Y -= step;
+            //        break;
+            //    case "Down":
+            //        Y += step;
+            //        break;
+            //}
+        }
     }
 }

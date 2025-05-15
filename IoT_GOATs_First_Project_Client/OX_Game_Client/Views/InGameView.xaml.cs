@@ -28,11 +28,47 @@ namespace OX_Game_Client.Views
     {
         //private double moveStep = 30;
         //private double animationTime = 0.1;
+        private InGameViewModel ViewModel => (InGameViewModel)DataContext;
 
 
         public InGameView()
         {
             InitializeComponent();
+            //Keyboard.Focus(GameCanvas);
+        }
+
+        private async void UserControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.FocusedElement is TextBox)
+            {
+                return;
+            }
+            Console.WriteLine("++++++++++++++++++++++++");
+            try
+            {
+                e.Handled = true;
+                if (e.Key == Key.Left)
+                    await ViewModel.Move("Left");
+                else if (e.Key == Key.Right)
+                    await ViewModel.Move("Right");
+                else if (e.Key == Key.Up)
+                    await ViewModel.Move("Up");
+                else if (e.Key == Key.Down)
+                    await ViewModel.Move("Down");
+            }
+            catch (Exception ex)
+            {
+            }
+            
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            GameCanvas.Focus();
+            Keyboard.Focus(this);
+
+            Console.WriteLine("Is GameCanvas Focusable: " + GameCanvas.Focusable);
+            Console.WriteLine("Is GameCanvas Focused: " + GameCanvas.IsFocused);
         }
 
         //public InGameView()
@@ -49,7 +85,7 @@ namespace OX_Game_Client.Views
         //    Keyboard.Focus(GameCanvas);
         //    GameCanvas.KeyDown += GameCanvas_KeyDown;
         //}
-        
+
         //private void GameCanvas_KeyDown(object sender, KeyEventArgs e)
         //{
         //    double currentLeft = Canvas.GetLeft(Character);

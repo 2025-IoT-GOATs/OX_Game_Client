@@ -7,67 +7,73 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:OX_Game_Client.Views"
         mc:Ignorable="d" 
-        d:DesignHeight="500" d:DesignWidth="900" Background="White">
-        <Grid>
-            
+        d:DesignHeight="500" d:DesignWidth="900" Background="White"
+        Loaded="UserControl_Loaded" KeyDown="UserControl_KeyDown"
+        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+
         <!-- 상단: 문제 -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="700"/>
-                <ColumnDefinition Width="200"/>
-            </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- 상단 문제 텍스트 -->
-            <TextBlock x:Name="QuestionText" Text="OX 문제를 표시하세요" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Grid.Row="0"/>
-            
-            <!--<ProgressBar x:Name="TimerBar" Height="10" Minimum="0" Maximum="100" Value="100"/>-->
+        <!-- 상단 문제 텍스트 -->
+        <TextBlock x:Name="QuestionText" Text="OX 문제를 표시하세요" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Grid.Row="0"/>
+
+        <!--<ProgressBar x:Name="TimerBar" Height="10" Minimum="0" Maximum="100" Value="100"/>-->
         <Canvas x:Name="GameCanvas" Background="Transparent" Width="700" Height="450" Focusable="True" Grid.Row="1" Grid.Column="0" >
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="KeyDown">
-                    <i:InvokeCommandAction Command="{Binding SendKeyPressCommand}" CommandParameter="{Binding EventArgs.Key}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+
             <!-- O 영역 -->
-                <Rectangle Width="350" Height="450" Fill="LightBlue" Canvas.Left="0" Canvas.Top="0"/>
-                <TextBlock Text="O" FontSize="40" FontWeight="Bold" Canvas.Left="150" Canvas.Top="10"/>
-                <!--<Button Content="test" Click=""/>-->
+            <Rectangle Width="350" Height="450" Fill="LightBlue" Canvas.Left="0" Canvas.Top="0"/>
+            <TextBlock Text="O" FontSize="40" FontWeight="Bold" Canvas.Left="150" Canvas.Top="10"/>
+            <!--<Button Content="test" Click=""/>-->
 
-                <!-- X 영역 -->
-                <Rectangle Width="350" Height="450" Fill="LightPink" Canvas.Left="350" Canvas.Top="0"/>
-                <TextBlock Text="X" FontSize="40" FontWeight="Bold" Canvas.Left="500" Canvas.Top="10"/>
+            <!-- X 영역 -->
+            <Rectangle Width="350" Height="450" Fill="LightPink" Canvas.Left="350" Canvas.Top="0"/>
+            <TextBlock Text="X" FontSize="40" FontWeight="Bold" Canvas.Left="500" Canvas.Top="10"/>
+
+            <!--<Ellipse Canvas.Left="100" Canvas.Top="100" Fill="Red" Width="30" Height="30" Focusable="True">
+                <Ellipse.InputBindings>
+                    <KeyBinding Key="Right" Command="{Binding ToRightCommand}" />
+                </Ellipse.InputBindings>
+            </Ellipse>-->
+
+            <!-- 캐릭터 -->
+            <Canvas x:Name="Character"  Focusable="True"
+                    Canvas.Left="{Binding X, UpdateSourceTrigger=PropertyChanged}"
+                    Canvas.Top="{Binding Y, UpdateSourceTrigger=PropertyChanged}">
                 
-                <!-- 캐릭터 (예: 빨간 네모) -->
-                <Canvas x:Name="Character" Canvas.Left="100" Canvas.Top="300">
-                     
                 <!-- 몸통 -->
-                    <Ellipse Width="50" Height="50" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="2"/>
+                <Ellipse Width="50" Height="50" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="2"/>
 
-                    <!-- 눈 (큰 눈) -->
-                    <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="12" Canvas.Top="12"/>
-                    <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="28" Canvas.Top="12"/>
+                <!-- 눈 -->
+                <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="12" Canvas.Top="12"/>
+                <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="28" Canvas.Top="12"/>
 
-                    <!-- 볼 (핑크색 볼터치) -->
-                    <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="8" Canvas.Top="24"/>
-                    <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="36" Canvas.Top="24"/>
+                <!-- 볼 -->
+                <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="8" Canvas.Top="24"/>
+                <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="36" Canvas.Top="24"/>
 
-                    <!-- 이름 또는 번호 -->
-                    <TextBlock x:Name="CharName" FontWeight="Bold" FontSize="10"
+                <!-- 이름 -->
+                <TextBlock x:Name="CharName" FontWeight="Bold" FontSize="10"
                                Foreground="#AA0077"
                                Width="50" Height="50"
                                TextAlignment="Center" VerticalAlignment="Center"
                                Padding="0" Canvas.Left="0" Canvas.Top="30"/>
 
-                    <!-- 다리 (둥근 다리) -->
-                    <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="12"/>
-                    <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="28"/>
-                </Canvas>
+                <!-- 다리 -->
+                <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="12"/>
+                <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="28"/>
             </Canvas>
-            <StackPanel Grid.Column="1" Grid.Row="1" Margin="1" VerticalAlignment="Top">
-                <TextBlock Text="채팅창" FontWeight="Bold" FontSize="14" Margin="0,0,0,5" Background="Bisque" Foreground="Black" TextAlignment="Center"/>
-                <!--<TextBox Height="350" Margin="5" Background="Beige" Foreground="Black"/>-->
+        </Canvas>
+        <StackPanel Grid.Column="1" Grid.Row="1" Margin="1" VerticalAlignment="Top">
+            <TextBlock Text="채팅창" FontWeight="Bold" FontSize="14" Margin="0,0,0,5" Background="Bisque" Foreground="Black" TextAlignment="Center"/>
+            <!--<TextBox Height="350" Margin="5" Background="Beige" Foreground="Black"/>-->
             <ListBox x:Name="ChatList" Height="350" Background="Beige" Foreground="Black" ItemsSource="{Binding OutputMessages}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -82,14 +88,14 @@
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <TextBox x:Name="ChatInput" Width="125" Margin="5" Background="white" Foreground="Black"
                          Text="{Binding InputMessage, UpdateSourceTrigger=PropertyChanged}">
-                    
+
                     <TextBox.InputBindings>
                         <KeyBinding Key="Return" Command="{Binding SendChatCommand}" />
                     </TextBox.InputBindings>
                 </TextBox>
                 <Button Content="전송" Width="50" Background="white" Foreground="Black" Command="{Binding SendChatCommand}"/>
-                </StackPanel>
             </StackPanel>
+        </StackPanel>
 
-        </Grid>
+    </Grid>
 </UserControl>
