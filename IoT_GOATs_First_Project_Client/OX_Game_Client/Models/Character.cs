@@ -7,22 +7,21 @@ using System.Threading.Tasks;
 
 namespace OX_Game_Client.Models
 {
-    public class Character : ObservableObject
+    public partial class Character : ObservableObject
     {
-        private double x = 100;
+        [ObservableProperty]
+        private string _userName;
+        [ObservableProperty]
+        private double x;
+        [ObservableProperty]
+        private double y;
 
-        public double X
+        public Character(string name, double x, double y)
         {
-            get => x;
-            set => SetProperty(ref x, value);
+            UserName = name;
+            X = x;
+            Y = y;
         }
 
-        private double y = 100;
-
-        public double Y
-        {
-            get => y;
-            set => SetProperty(ref y, value);
-        }
     }
 }

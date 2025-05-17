@@ -47,34 +47,87 @@
             <Canvas x:Name="Character"  Focusable="True"
                     Canvas.Left="{Binding X, UpdateSourceTrigger=PropertyChanged}"
                     Canvas.Top="{Binding Y, UpdateSourceTrigger=PropertyChanged}">
+                <ItemsControl ItemsSource="{Binding CurrentParticipants, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="700" Height="450" Background="Transparent"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Canvas Width="50" Height="60">
+                                <!-- 몸통 -->
+                                <Ellipse Width="50" Height="50" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="2"/>
+
+                                <!-- 눈 -->
+                                <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="12" Canvas.Top="12"/>
+                                <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="28" Canvas.Top="12"/>
+
+                                <!-- 볼 -->
+                                <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="8" Canvas.Top="24"/>
+                                <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="36" Canvas.Top="24"/>
+
+                                <!-- 이름 -->
+                                <TextBlock FontWeight="Bold" FontSize="10" Foreground="#AA0077"
+                               Width="50" Height="50" TextAlignment="Center" VerticalAlignment="Center"
+                               Padding="0" Canvas.Left="0" Canvas.Top="30" 
+                               Text="{Binding Name}"/>
+
+                                <!-- 다리 -->
+                                <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="12"/>
+                                <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="28"/>
+                            </Canvas>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Canvas>
+            <!--<Canvas x:Name="Character"  Focusable="True"
+                    Canvas.Left="{Binding X, UpdateSourceTrigger=PropertyChanged}"
+                    Canvas.Top="{Binding Y, UpdateSourceTrigger=PropertyChanged}">
                 
-                <!-- 몸통 -->
+                --><!-- 몸통 --><!--
                 <Ellipse Width="50" Height="50" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="2"/>
 
-                <!-- 눈 -->
+                --><!-- 눈 --><!--
                 <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="12" Canvas.Top="12"/>
                 <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="28" Canvas.Top="12"/>
 
-                <!-- 볼 -->
+                --><!-- 볼 --><!--
                 <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="8" Canvas.Top="24"/>
                 <Ellipse Width="6" Height="6" Fill="#FFB6C1" Canvas.Left="36" Canvas.Top="24"/>
 
-                <!-- 이름 -->
+                --><!-- 이름 --><!--
                 <TextBlock x:Name="CharName" FontWeight="Bold" FontSize="10"
                                Foreground="#AA0077"
                                Width="50" Height="50"
                                TextAlignment="Center" VerticalAlignment="Center"
                                Padding="0" Canvas.Left="0" Canvas.Top="30"/>
 
-                <!-- 다리 -->
+                --><!-- 다리 --><!--
                 <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="12"/>
                 <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="28"/>
-            </Canvas>
+            </Canvas>-->
         </Canvas>
         <StackPanel Grid.Column="1" Grid.Row="1" Margin="1" VerticalAlignment="Top">
             <TextBlock Text="채팅창" FontWeight="Bold" FontSize="14" Margin="0,0,0,5" Background="Bisque" Foreground="Black" TextAlignment="Center"/>
             <!--<TextBox Height="350" Margin="5" Background="Beige" Foreground="Black"/>-->
-            <ListBox x:Name="ChatList" Height="350" Background="Beige" Foreground="Black" ItemsSource="{Binding OutputMessages}">
+            <ListBox x:Name="LoginList" Height="50" Background="white" Foreground="Black" ItemsSource="{Binding LoginMessages}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="white"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <ListBox x:Name="ChatList" Height="340" Background="Beige" Foreground="Black" ItemsSource="{Binding OutputMessages}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Background" Value="Beige"/>
@@ -84,6 +137,7 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
+            
 
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <TextBox x:Name="ChatInput" Width="125" Margin="5" Background="white" Foreground="Black"

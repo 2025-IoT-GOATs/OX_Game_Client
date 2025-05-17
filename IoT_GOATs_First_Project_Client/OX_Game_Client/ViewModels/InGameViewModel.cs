@@ -16,19 +16,37 @@ using CommunityToolkit.Mvvm.Input;
 using OX_Game_Client.Models;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.DirectoryServices;
 
 namespace OX_Game_Client.ViewModels
 {
     public partial class InGameViewModel : ObservableObject
     {
+        //[ObservableProperty]
+        //private ObservableCollection<Character> participants;
+        [ObservableProperty]
+        private ObservableCollection<Character> currentParticipants;
+
         private readonly SocketConn _client = SocketConn.Instance;
-        public InGameViewModel(string name)
+
+        public ObservableCollection<string> LoginMessages { get; } = new ObservableCollection<string>();
+        public InGameViewModel(string name, ObservableCollection<string> loginMessages)
         {
             Name = name;
+            LoginMessages = loginMessages;
             _client.MessageReceived += OnChatReceived;
+
+            currentParticipants = CharacterManager.Instance.Participants;
+
+            //foreach (var p in currentParticipants)
+            //{
+            //    Console.WriteLine($"참가자 목록 : {p}");
+            //}
         }
         private void OnChatReceived(string msg)
         {
+            Console.WriteLine("인게임뷰모델꺼");
+
             StringReader rs = new StringReader(msg);
             string readMsg = rs.ReadLine();
             string[] words = readMsg.Split(' ');
@@ -47,10 +65,12 @@ namespace OX_Game_Client.ViewModels
                     });
                 }
             }
-            else if (words[0] == "MOVE")
+            else if (words[0] == "MOVE" || words[0] == "LOGIN")
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+                    currentParticipants = CharacterManager.Instance.Participants;
+
                     OutputMoveMsg.Add(msg);
                 });
             }
@@ -85,35 +105,7 @@ namespace OX_Game_Client.ViewModels
 
             }
         }
-        //[RelayCommand]
-        //public async void SendKeyPress(Key key)
-        //{
-        //    Console.WriteLine("키보드 입력");
-        //    string keyPressMsg = $"MOVE {key.ToString()}\n";
-        //    try
-        //    {
-        //        await _client.send(keyPressMsg);
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-        //}
 
-        private double x = 100;
-
-        public double X
-        {
-            get => x;
-            set => SetProperty(ref x, value);
-        }
-
-        private double y = 100;
-
-        public double Y
-        {
-            get => y;
-            set => SetProperty(ref y, value);
-        }
         public async Task Move(string direction)
         {
             const double step = 10;
