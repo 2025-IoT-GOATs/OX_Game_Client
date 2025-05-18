@@ -26,6 +26,7 @@ namespace OX_Game_Client.ViewModels
        
         private UserControl _currentView;
         private bool isStart = false;
+        [ObservableProperty] private CharacterManager manager;
         public UserControl CurrentView
         {
             get => _currentView;
@@ -38,6 +39,9 @@ namespace OX_Game_Client.ViewModels
         {
             //SocketConn.Instance.recv();
             //SocketConn.Instance.connect("210.119.12.82", 9000);
+            CharacterManager.InitCharManager();
+            Manager = CharacterManager.Instance;
+
             Thread t = new Thread(async () =>
             {
                 await SocketConn.Instance.connect("210.119.12.82", 9000);
@@ -60,8 +64,8 @@ namespace OX_Game_Client.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     Character participant = new Character(words[1], Convert.ToDouble(words[2]), Convert.ToDouble(words[3]));
-                    CharacterManager.InitCharManager(participant);
-                    var manager = CharacterManager.Instance;
+                    //CharacterManager.InitCharManager();
+                    Manager.AddParticipant(participant);
                     LoginMessages.Add($"{words[1]} {words[2]} {words[3]}");
                     Console.WriteLine("채팅방 연결 완료");
                     var vm = new InGameViewModel(Name, LoginMessages);
@@ -75,8 +79,10 @@ namespace OX_Game_Client.ViewModels
             }
             else if (words[0] == "LOGIN")
             {
+                if (words[1] == Name) return;
+                if (CharacterManager.Instance.Participants.Any(c => c.UserName == words[1])) return;
                 var newChar = new Character(words[1], Convert.ToDouble(words[2]), Convert.ToDouble(words[3]));
-                CharacterManager.Instance?.AddParticipant(newChar);
+                Manager.AddParticipant(newChar);
             }
             else
             {

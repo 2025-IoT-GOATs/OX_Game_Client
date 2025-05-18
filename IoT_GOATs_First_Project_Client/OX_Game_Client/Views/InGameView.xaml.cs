@@ -48,13 +48,13 @@ namespace OX_Game_Client.Views
             {
                 e.Handled = true;
                 if (e.Key == Key.Left)
-                    await ViewModel.Move("Left");
+                    await ViewModel.Move("LEFT");
                 else if (e.Key == Key.Right)
-                    await ViewModel.Move("Right");
+                    await ViewModel.Move("RIGHT");
                 else if (e.Key == Key.Up)
-                    await ViewModel.Move("Up");
+                    await ViewModel.Move("UP");
                 else if (e.Key == Key.Down)
-                    await ViewModel.Move("Down");
+                    await ViewModel.Move("DOWN");
             }
             catch (Exception ex)
             {

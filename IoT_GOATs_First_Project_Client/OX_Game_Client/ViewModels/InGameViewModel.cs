@@ -36,7 +36,7 @@ namespace OX_Game_Client.ViewModels
             LoginMessages = loginMessages;
             _client.MessageReceived += OnChatReceived;
 
-            currentParticipants = CharacterManager.Instance.Participants;
+            CurrentParticipants = CharacterManager.Instance.Participants;
 
             //foreach (var p in currentParticipants)
             //{
@@ -48,32 +48,58 @@ namespace OX_Game_Client.ViewModels
             Console.WriteLine("인게임뷰모델꺼");
 
             StringReader rs = new StringReader(msg);
-            string readMsg = rs.ReadLine();
-            string[] words = readMsg.Split(' ');
-            if (words[0] ==  "CHAT")
+            while (rs.Peek() != -1)
             {
-                msg = msg.Substring(5, msg.Length - 5);
-                if (words[0] + words[1] == "CHATOK")
+                string readMsg = rs.ReadLine();
+                string[] words = readMsg.Split(' ');
+                string userName = words[1];
+                if (words[0] == "CHAT")
                 {
-                    OutputMessages.Add("채팅방 입장");
+                    msg = msg.Substring(5, msg.Length - 5);
+                    if (words[0] + words[1] == "CHATOK")
+                    {
+                        OutputMessages.Add("채팅방 입장");
+                    }
+                    else
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            OutputMessages.Add(msg);
+                        });
+                    }
                 }
-                else
+                else if (words[0] == "LOGIN")
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        OutputMessages.Add(msg);
+                        var alreadyExists = CharacterManager.Instance.Participants.Any(c => c.UserName == userName);
+                        if (!alreadyExists)
+                        {
+                            CharacterManager.Instance.AddParticipant(new Character(userName, 100, 100));
+                            CurrentParticipants = CharacterManager.Instance.Participants;
+                        }
+                        foreach (var p in currentParticipants)
+                        {
+                            Console.WriteLine($"TEST sibal {p.UserName}");
+                        }
+                    });
+                }
+                else if (words[0] == "MOVE")
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        OutputMoveMsg.Add(msg);
+                        Console.WriteLine($"Test : {msg}");
+                        var character = CurrentParticipants.FirstOrDefault(c => c.UserName == userName);
+                        if (character != null)
+                        {
+                            character.X = Convert.ToDouble(words[2]);
+                            character.Y = Convert.ToDouble(words[3]);
+                        }
                     });
                 }
             }
-            else if (words[0] == "MOVE" || words[0] == "LOGIN")
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    currentParticipants = CharacterManager.Instance.Participants;
-
-                    OutputMoveMsg.Add(msg);
-                });
-            }
+            
         }
 
         [ObservableProperty]
@@ -108,7 +134,7 @@ namespace OX_Game_Client.ViewModels
 
         public async Task Move(string direction)
         {
-            const double step = 10;
+            //const double step = 10;
             string moveMsg = $"MOVE {direction}\n";
             await SocketConn.Instance.send(moveMsg);
             moveMsg = string.Empty;

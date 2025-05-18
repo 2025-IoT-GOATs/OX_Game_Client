@@ -10,11 +10,13 @@ namespace OX_Game_Client.Models
     public partial class Character : ObservableObject
     {
         [ObservableProperty]
-        private string _userName;
+        private string userName;
         [ObservableProperty]
         private double x;
         [ObservableProperty]
         private double y;
+        [ObservableProperty]
+        private bool isExist = false;
 
         public Character(string name, double x, double y)
         {

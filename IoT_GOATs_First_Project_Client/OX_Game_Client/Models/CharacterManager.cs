@@ -21,19 +21,19 @@ namespace OX_Game_Client.Models
             set => instance = value; 
         }
 
-        private CharacterManager(Character character)
+        private CharacterManager()
         {
-            Participants.Add(character);
+            //InitCharManager();
         }
         //private CharacterManager()
         //{
         //}
 
-        public static void InitCharManager(Character character)
+        public static void InitCharManager()
         {
             if (Instance == null)
             {
-                Instance = new CharacterManager(character);
+                Instance = new CharacterManager();
             }
         }
 
@@ -41,7 +41,11 @@ namespace OX_Game_Client.Models
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+            if (character.IsExist == false)
+            {
                 Participants.Add(character);
+                character.IsExist = true;
+            }
             });
         }
     }

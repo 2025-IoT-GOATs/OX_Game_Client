@@ -55,15 +55,15 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemContainerStyle>
                         <Style>
-                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
-                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                            <Setter Property="Canvas.Left" Value="{Binding X, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y, UpdateSourceTrigger=PropertyChanged}"/>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Canvas Width="50" Height="60">
                                 <!-- 몸통 -->
-                                <Ellipse Width="50" Height="50" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="2"/>
+                                <Ellipse Width="50" Height="50" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="2" />
 
                                 <!-- 눈 -->
                                 <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="12" Canvas.Top="12"/>
@@ -77,7 +77,7 @@
                                 <TextBlock FontWeight="Bold" FontSize="10" Foreground="#AA0077"
                                Width="50" Height="50" TextAlignment="Center" VerticalAlignment="Center"
                                Padding="0" Canvas.Left="0" Canvas.Top="30" 
-                               Text="{Binding Name}"/>
+                               Text="{Binding UserName}"/>
 
                                 <!-- 다리 -->
                                 <Ellipse Width="10" Height="6" Fill="#FFEBF0" Stroke="#FFAACD" StrokeThickness="1" Canvas.Top="48" Canvas.Left="12"/>
@@ -127,7 +127,7 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-            <ListBox x:Name="ChatList" Height="340" Background="Beige" Foreground="Black" ItemsSource="{Binding OutputMessages}">
+            <ListBox x:Name="ChatList" Height="310" Background="Beige" Foreground="Black" ItemsSource="{Binding OutputMessages}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Background" Value="Beige"/>
